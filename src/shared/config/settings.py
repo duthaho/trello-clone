@@ -1,7 +1,6 @@
 """Application configuration using Pydantic Settings."""
 
 from functools import lru_cache
-from typing import List, Union
 
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -44,7 +43,7 @@ class Settings(BaseSettings):
     jwt_refresh_token_expire_days: int = 7
 
     # CORS
-    cors_origins: List[str] = Field(
+    cors_origins: list[str] = Field(
         default=["http://localhost:3000"],
         description="Allowed CORS origins",
     )
@@ -52,7 +51,7 @@ class Settings(BaseSettings):
 
     @field_validator("cors_origins", mode="before")
     @classmethod
-    def parse_cors_origins(cls, v: Union[str, List[str]]) -> List[str]:
+    def parse_cors_origins(cls, v: str | list[str]) -> list[str]:
         """Parse CORS origins from comma-separated string or list."""
         print(v)
         if isinstance(v, str):

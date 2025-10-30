@@ -1,7 +1,7 @@
 """FastAPI application entry point."""
 
+from collections.abc import AsyncGenerator
 from contextlib import asynccontextmanager
-from typing import AsyncGenerator
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -14,21 +14,21 @@ settings = get_settings()
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+async def lifespan(_app: FastAPI) -> AsyncGenerator[None, None]:
     """Application lifespan events."""
     # Startup
     print(f"Starting {settings.app_name} v{settings.app_version}")
     print(f"Environment: {settings.environment}")
-    
+
     # TODO: Initialize database connection pool
     # TODO: Initialize Redis connection
     # TODO: Initialize observability (logging, tracing, metrics)
-    
+
     yield
-    
+
     # Shutdown
     print(f"Shutting down {settings.app_name}")
-    
+
     # TODO: Close database connections
     # TODO: Close Redis connections
     # TODO: Flush metrics and traces
@@ -75,22 +75,22 @@ async def health_check() -> JSONResponse:
 @app.get("/ready", tags=["health"])
 async def readiness_check() -> JSONResponse:
     """Readiness check endpoint.
-    
+
     Checks if the application is ready to serve traffic.
     This should verify database connectivity, cache availability, etc.
     """
     # TODO: Check database connection
     # TODO: Check Redis connection
     # TODO: Check other critical dependencies
-    
+
     return JSONResponse(
         content={
             "status": "ready",
             "service": settings.app_name,
             "checks": {
                 "database": "ok",  # TODO: Implement actual check
-                "cache": "ok",     # TODO: Implement actual check
-            }
+                "cache": "ok",  # TODO: Implement actual check
+            },
         }
     )
 
@@ -113,7 +113,7 @@ async def root() -> dict[str, str]:
 
 if __name__ == "__main__":
     import uvicorn
-    
+
     uvicorn.run(
         "src.main:app",
         host="0.0.0.0",

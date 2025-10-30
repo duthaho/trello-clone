@@ -1,8 +1,5 @@
 """Repository interfaces for Users bounded context."""
 
-from abc import ABC, abstractmethod
-from typing import Optional
-from uuid import UUID
 
 # Repository interfaces will be defined here
 # Example:

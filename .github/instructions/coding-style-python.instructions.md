@@ -187,8 +187,8 @@ Use isort or ruff for automatic sorting:
 ```python
 # Standard library
 import os
+from collections.abc import AsyncGenerator  # Use collections.abc, not typing
 from datetime import datetime
-from typing import List, Optional
 from uuid import UUID, uuid4
 
 # Third-party
@@ -200,6 +200,70 @@ import pytest
 from domain.order import Order, OrderItem
 from application.repositories import OrderRepository
 from infrastructure.database import get_db_session
+```
+
+### Modern Python Import Rules (Python 3.9+)
+
+**IMPORTANT**: Use modern type hints from `collections.abc` and built-in types:
+
+✅ **Good (Modern Python 3.9+):**
+
+```python
+from collections.abc import AsyncGenerator, Callable, Iterable
+from typing import Optional, TypeAlias
+
+def get_items() -> list[str]:  # Use lowercase list, dict, set, tuple
+    return ["item1", "item2"]
+
+def process_data(items: dict[str, int]) -> None:  # Use dict[K, V] not Dict
+    pass
+
+async def stream_data() -> AsyncGenerator[str, None]:  # Import from collections.abc
+    yield "data"
+```
+
+❌ **Bad (Deprecated):**
+
+```python
+from typing import List, Dict, AsyncGenerator  # Deprecated in Python 3.9+
+
+def get_items() -> List[str]:  # Don't use typing.List
+    return ["item1", "item2"]
+
+def process_data(items: Dict[str, int]) -> None:  # Don't use typing.Dict
+    pass
+```
+
+### Unused Import Prevention
+
+**CRITICAL**: Remove unused imports immediately. Ruff will flag these as errors.
+
+✅ **Good:**
+
+```python
+from abc import ABC, abstractmethod
+
+class Repository(ABC):
+    @abstractmethod
+    def save(self, entity) -> None:
+        pass
+```
+
+❌ **Bad:**
+
+```python
+from abc import ABC, abstractmethod  # Both imported but not used
+from typing import Optional  # Imported but not used
+
+# No code using these imports
+```
+
+**Exception**: `__init__.py` files can have unused imports for re-exporting:
+
+```python
+# src/domain/__init__.py
+from .order import Order  # noqa: F401 - Re-exported for convenience
+from .customer import Customer  # noqa: F401
 ```
 
 ## Function and Method Design
@@ -375,3 +439,172 @@ message = (
 - [ ] No lines exceed 100 characters
 - [ ] Meaningful variable names
 - [ ] No commented-out code in commits
+
+## Whitespace Rules
+
+**CRITICAL**: No trailing whitespace on any line, including blank lines.
+
+✅ **Good:**
+
+```python
+def my_function():
+    """Docstring."""
+
+    # Blank line above has no spaces
+    return value
+```
+
+❌ **Bad:**
+
+```python
+def my_function():
+    """Docstring."""
+
+    # Blank line above has trailing spaces (invisible but causes errors)
+    return value
+```
+
+**Tip**: Configure your editor to remove trailing whitespace on save.
+
+## Unused Function Arguments
+
+If a function parameter is required by an interface but not used, prefix it with underscore:
+
+✅ **Good:**
+
+```python
+@asynccontextmanager
+async def lifespan(_app: FastAPI) -> AsyncGenerator[None, None]:
+    """Lifespan manager. App param required by FastAPI but not used."""
+    yield
+
+def handle_event(_event: dict[str, Any]) -> None:
+    """Event handler. Event param required by protocol."""
+    pass
+```
+
+❌ **Bad:**
+
+```python
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    """App parameter not used - will trigger ARG001 error."""
+    yield
+```
+
+## Union Types - Modern Syntax
+
+Use `|` instead of `Union` for type unions (Python 3.10+):
+
+✅ **Good (Python 3.10+):**
+
+```python
+def process(value: str | int) -> str | None:
+    return str(value) if value else None
+
+def get_user(id: str) -> User | None:
+    return users.get(id)
+```
+
+❌ **Bad (Old syntax):**
+
+```python
+from typing import Union, Optional
+
+def process(value: Union[str, int]) -> Optional[str]:
+    return str(value) if value else None
+```
+
+## Common Ruff Errors to Avoid
+
+### F401: Unused Import
+
+Remove imports that aren't used in the file.
+
+```python
+# Bad
+from abc import ABC, abstractmethod  # Both unused
+
+# Repository interfaces will be defined here
+
+# Good - only import when needed
+# (no imports if nothing is implemented yet)
+```
+
+### UP035: Use collections.abc
+
+Import from `collections.abc` instead of `typing` for collection types:
+
+```python
+# Good
+from collections.abc import AsyncGenerator, Callable, Iterable, Iterator
+
+# Bad
+from typing import AsyncGenerator, Callable, Iterable, Iterator
+```
+
+### UP006/UP007: Modern Type Hints
+
+Use built-in types and `|` operator:
+
+```python
+# Good
+def func(items: list[str], mapping: dict[str, int]) -> str | None:
+    pass
+
+# Bad
+from typing import List, Dict, Optional, Union
+
+def func(items: List[str], mapping: Dict[str, int]) -> Optional[str]:
+    pass
+```
+
+### W293: Blank Line Contains Whitespace
+
+Ensure blank lines have no trailing spaces.
+
+### ARG001: Unused Function Argument
+
+Prefix unused arguments with underscore or use them.
+
+## Pre-commit Validation
+
+Before committing, always run:
+
+```bash
+# Fix auto-fixable issues
+ruff check src/ tests/ --fix
+
+# Verify all checks pass
+ruff check src/ tests/
+
+# Format code
+black src/ tests/
+
+# Type check
+mypy src/
+```
+
+## Updated Validation Checklist
+
+- [ ] All public functions have type hints
+- [ ] Code is formatted with Black
+- [ ] Imports are organized (stdlib, third-party, local)
+- [ ] Use `collections.abc` for AsyncGenerator, Callable, etc.
+- [ ] Use `list`, `dict`, `set`, `tuple` (lowercase) not `List`, `Dict`, etc.
+- [ ] Use `|` for unions instead of `Union[]` (Python 3.10+)
+- [ ] No unused imports (F401)
+- [ ] No trailing whitespace on any lines (W293)
+- [ ] Unused function arguments prefixed with `_` (ARG001)
+- [ ] Docstrings for public APIs
+- [ ] Enums for related constants
+- [ ] Dataclasses for data structures
+- [ ] Type aliases for complex types
+- [ ] No lines exceed 100 characters
+- [ ] Meaningful variable names
+- [ ] No commented-out code in commits
+- [ ] All ruff checks pass before committing
+
+```
+
+```
