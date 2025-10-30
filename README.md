@@ -35,14 +35,14 @@ See [Architecture Documentation](./docs/architecture/README.md) for comprehensiv
 
 ### 1. Clone the Repository
 
-\`\`\`bash
+```bash
 git clone https://github.com/your-org/trello-clone.git
 cd trello-clone
-\`\`\`
+```
 
 ### 2. Set Up Python Environment
 
-\`\`\`bash
+```bash
 
 # Create virtual environment
 
@@ -61,11 +61,11 @@ source venv/bin/activate
 # Install dependencies
 
 pip install -e ".[dev]"
-\`\`\`
+```
 
 ### 3. Configure Environment
 
-\`\`\`bash
+```bash
 
 # Copy example environment file
 
@@ -75,11 +75,11 @@ cp .env.example .env
 
 # Update database credentials, secret keys, etc.
 
-\`\`\`
+```
 
 ### 4. Start Services with Docker Compose
 
-\`\`\`bash
+```bash
 
 # Start MySQL, Redis, Prometheus, Grafana
 
@@ -88,20 +88,20 @@ docker-compose -f docker/docker-compose.yml up -d mysql redis prometheus grafana
 # Wait for services to be healthy
 
 docker-compose -f docker/docker-compose.yml ps
-\`\`\`
+```
 
 ### 5. Run Database Migrations
 
-\`\`\`bash
+```bash
 
 # Run Alembic migrations
 
 alembic upgrade head
-\`\`\`
+```
 
 ### 6. Start the Application
 
-\`\`\`bash
+```bash
 
 # Start FastAPI development server
 
@@ -110,7 +110,7 @@ uvicorn src.main:app --reload --host 0.0.0.0 --port 8000
 # In another terminal, start Celery worker
 
 celery -A src.infrastructure.messaging.celery.app worker --loglevel=info
-\`\`\`
+```
 
 ### 7. Verify Installation
 
@@ -122,7 +122,7 @@ celery -A src.infrastructure.messaging.celery.app worker --loglevel=info
 
 ## 🧪 Running Tests
 
-\`\`\`bash
+```bash
 
 # Run all tests
 
@@ -141,11 +141,11 @@ pytest tests/contract # Contract tests only
 # Run with markers
 
 pytest -m "not slow" # Skip slow tests
-\`\`\`
+```
 
 ## 🔍 Code Quality
 
-\`\`\`bash
+```bash
 
 # Linting with Ruff
 
@@ -167,11 +167,11 @@ safety check
 # Run all quality checks
 
 ruff check src/ tests/ && black --check src/ tests/ && mypy src/
-\`\`\`
+```
 
 ## 🐳 Docker Development
 
-\`\`\`bash
+```bash
 
 # Build and run entire stack
 
@@ -192,11 +192,11 @@ docker-compose -f docker/docker-compose.yml down
 # Clean up volumes
 
 docker-compose -f docker/docker-compose.yml down -v
-\`\`\`
+```
 
 ## 📚 Project Structure
 
-\`\`\`
+```
 trello-clone/
 ├── src/ # Source code
 │ ├── domain/ # Domain layer (entities, value objects, events)
@@ -235,7 +235,7 @@ trello-clone/
 │ └── workflows/
 ├── pyproject.toml # Project metadata and dependencies
 └── README.md # This file
-\`\`\`
+```
 
 ## 📖 Documentation
 

@@ -1,4 +1,3 @@
-````markdown
 # ADR-001: Clean Architecture with Domain-Driven Design
 
 **Status**: Accepted  
@@ -185,5 +184,4 @@ This decision will be validated by:
 
 - [Clean Architecture (Robert C. Martin)](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html)
 - [Domain-Driven Design (Eric Evans)](https://www.domainlanguage.com/ddd/)
-- [Constitution: Clean Architecture Principle](../../../.github/instructions/clean-architecture.instructions.md)
-````
+- - [Constitution: Clean Architecture Principle](../../../.github/instructions/clean-architecture.instructions.md)

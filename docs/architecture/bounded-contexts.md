@@ -1,4 +1,3 @@
-````markdown
 # Bounded Contexts and Data Model
 
 **Version**: 1.0.0  
@@ -542,4 +541,3 @@ This data model defines five bounded contexts with clear boundaries and integrat
 
 **Last Reviewed**: 2025-10-30  
 **Next Review**: 2026-01-30 (Quarterly)
-````

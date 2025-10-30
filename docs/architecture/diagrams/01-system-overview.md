@@ -1,4 +1,3 @@
-````markdown
 # System Architecture Overview
 
 **Version**: 1.0.0  
@@ -577,4 +576,3 @@ Multi-AZ deployment ensures uptime:
 
 **Last Reviewed**: 2025-10-30  
 **Next Review**: 2026-01-30 (Quarterly)
-````

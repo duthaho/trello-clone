@@ -1,4 +1,3 @@
-````markdown
 # Technology Choices and Justifications
 
 **Version**: 1.0.0  
@@ -611,4 +610,3 @@ All architectural decisions align with the project's constitution and support th
 
 **Last Reviewed**: 2025-10-30  
 **Next Review**: 2026-01-30 (Quarterly)
-````
